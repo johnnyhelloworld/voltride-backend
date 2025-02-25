@@ -15,8 +15,8 @@ model Scooter {
   lastMaintenanceDate DateTime
   mileage             Int
   status              String
-  ownerId             String?       // ownerId est optionnel
-  user                User?         @relation("UserScooters", fields: [ownerId], references: [id])  // user est maintenant optionnel
+  ownerId             String? // ownerId est optionnel
+  user                User?         @relation("UserScooters", fields: [ownerId], references: [id]) // user est maintenant optionnel
   Maintenance         Maintenance[]
   isImmobilized       Boolean       @default(false)
 }
@@ -40,25 +40,51 @@ model Maintenance {
 }
 
 model User {
-  id              String   @id @default(uuid())
-  email           String   @unique
-  password        String
-  roles           String[] // Roles can be managed as an array of strings
-  name            String?
-  licenseNumber   String?
+  id               String    @id @default(uuid())
+  email            String    @unique
+  password         String
+  roles            String[] // Roles can be managed as an array of strings
+  name             String?
+  licenseNumber    String?
   modelPreferences String[]
-  scooters        Scooter[] @relation("UserScooters") // Added relation to Scooter
+  scooters         Scooter[] @relation("UserScooters") // Added relation to Scooter
 }
 
 model Incident {
-  id          String   @id @default(uuid())
-  scooterId   String
-  type        String
-  description String
-  reportedAt  DateTime @default(now())
-  resolvedAt  DateTime?
-  underWarranty Boolean @default(false)
-  status        String   @default("pending")
+  id                String    @id @default(uuid())
+  scooterId         String
+  type              String
+  description       String
+  reportedAt        DateTime  @default(now())
+  resolvedAt        DateTime?
+  underWarranty     Boolean   @default(false)
+  status            String    @default("pending")
   warrantyExpiresAt DateTime?
-  immobilizedDays  Int?
+  immobilizedDays   Int?
+}
+
+model Part {
+  id          String   @id @default(uuid())
+  name        String
+  description String?
+  quantity    Int
+  minStock    Int      @default(5)
+  price       Float
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  Order       Order[]
+}
+
+model Order {
+  id           String    @id @default(uuid())
+  partId       String
+  supplier     String
+  quantity     Int
+  unitPrice    Float
+  orderDate    DateTime  @default(now())
+  deliveryDate DateTime?
+  totalPrice   Float     @default(0)
+  status       String    @default("pending")
+
+  part Part @relation(fields: [partId], references: [id])
 }

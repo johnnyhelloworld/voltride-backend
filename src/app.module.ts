@@ -26,6 +26,11 @@ import { IncidentController } from './interface/controllers/incident.controller'
 import { ReportIncidentUseCase } from './application/use-cases/incident/report-incident.use-case';
 import { PrismaIncidentRepository } from './infrastructure/database/prisma/prisma-incident.repository';
 import { ManageWarrantyUseCase } from './application/use-cases/incident/manage-warranty.use-case';
+import { PrismaPartRepository } from './infrastructure/database/prisma/prisma-part.repository';
+import { PartController } from './interface/controllers/part.controller';
+import { PartService } from './application/services/part.service';
+import { OrderController } from './interface/controllers/order.controller';
+import { PrismaOrderRepository } from './infrastructure/database/prisma/prisma-order.repository';
 
 @Module({
   imports: [
@@ -43,6 +48,8 @@ import { ManageWarrantyUseCase } from './application/use-cases/incident/manage-w
     StockController,
     AuthController,
     IncidentController,
+    PartController,
+    OrderController,
   ],
   providers: [
     PrismaService,
@@ -78,6 +85,15 @@ import { ManageWarrantyUseCase } from './application/use-cases/incident/manage-w
       useClass: PrismaIncidentRepository,
     },
     ManageWarrantyUseCase,
+    {
+      provide: 'PartRepository',
+      useClass: PrismaPartRepository,
+    },
+    PartService,
+    {
+      provide: 'OrderRepository',
+      useClass: PrismaOrderRepository,
+    },
   ],
   exports: [PrismaService],
 })
