@@ -7,5 +7,6 @@ export class Scooter {
     public lastMaintenanceDate: Date,
     public status: 'active' | 'maintenance' | 'out_of_service',
     public ownerId: string,
+    public isImmobilized: boolean,
   ) {}
 }

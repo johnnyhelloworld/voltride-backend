@@ -18,6 +18,7 @@ model Scooter {
   ownerId             String?       // ownerId est optionnel
   user                User?         @relation("UserScooters", fields: [ownerId], references: [id])  // user est maintenant optionnel
   Maintenance         Maintenance[]
+  isImmobilized       Boolean       @default(false)
 }
 
 model Stock {
@@ -47,4 +48,17 @@ model User {
   licenseNumber   String?
   modelPreferences String[]
   scooters        Scooter[] @relation("UserScooters") // Added relation to Scooter
+}
+
+model Incident {
+  id          String   @id @default(uuid())
+  scooterId   String
+  type        String
+  description String
+  reportedAt  DateTime @default(now())
+  resolvedAt  DateTime?
+  underWarranty Boolean @default(false)
+  status        String   @default("pending")
+  warrantyExpiresAt DateTime?
+  immobilizedDays  Int?
 }

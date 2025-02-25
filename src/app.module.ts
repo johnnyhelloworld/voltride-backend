@@ -22,6 +22,10 @@ import { AuthService } from './application/services/auth.service';
 import { JwtStrategy } from './application/strategies/jwt.strategy';
 import { PrismaUserRepository } from './infrastructure/database/prisma/prisma-user.repository';
 import { ConfigModule } from '@nestjs/config';
+import { IncidentController } from './interface/controllers/incident.controller';
+import { ReportIncidentUseCase } from './application/use-cases/incident/report-incident.use-case';
+import { PrismaIncidentRepository } from './infrastructure/database/prisma/prisma-incident.repository';
+import { ManageWarrantyUseCase } from './application/use-cases/incident/manage-warranty.use-case';
 
 @Module({
   imports: [
@@ -38,6 +42,7 @@ import { ConfigModule } from '@nestjs/config';
     MaintenanceController,
     StockController,
     AuthController,
+    IncidentController,
   ],
   providers: [
     PrismaService,
@@ -67,6 +72,12 @@ import { ConfigModule } from '@nestjs/config';
       provide: 'UserRepository',
       useClass: PrismaUserRepository,
     },
+    ReportIncidentUseCase,
+    {
+      provide: 'IncidentRepository',
+      useClass: PrismaIncidentRepository,
+    },
+    ManageWarrantyUseCase,
   ],
   exports: [PrismaService],
 })

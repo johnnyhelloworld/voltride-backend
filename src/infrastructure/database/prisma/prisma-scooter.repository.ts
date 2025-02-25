@@ -19,6 +19,7 @@ export class PrismaScooterRepository implements ScooterRepository {
       scooter.lastMaintenanceDate,
       scooter.status as 'active' | 'maintenance' | 'out_of_service',
       scooter.ownerId || '',
+      scooter.isImmobilized,
     );
   }
 
@@ -34,6 +35,7 @@ export class PrismaScooterRepository implements ScooterRepository {
           scooter.lastMaintenanceDate,
           scooter.status as 'active' | 'maintenance' | 'out_of_service',
           scooter.ownerId || '',
+          scooter.isImmobilized,
         ),
     );
   }

@@ -8,6 +8,7 @@ export class CreateScooterUseCase {
   ) {}
 
   async execute(input: {
+    isImmobilized: boolean;
     model: string;
     mileage: number;
     batteryCycles: number;
@@ -21,6 +22,7 @@ export class CreateScooterUseCase {
       new Date(),
       'active',
       input.ownerId,
+      input.isImmobilized,
     );
     console.log('Scooter trouvé:', scooter);
     await this.scooterRepository.save(scooter);

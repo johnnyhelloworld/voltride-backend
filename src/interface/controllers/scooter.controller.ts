@@ -6,11 +6,11 @@ import { Roles } from 'src/application/decorators/roles.decorator';
 
 @ApiTags('Scooters')
 @Controller('scooters')
-@UseGuards(RolesGuard)
+// @UseGuards(RolesGuard)
 export class ScooterController {
   constructor(private createScooterUseCase: CreateScooterUseCase) {}
 
-  @Roles('ADMIN')
+  // @Roles('ADMIN')
   @Post('create')
   @ApiOperation({ summary: 'Create a new scooter' })
   async createScooter(
@@ -20,6 +20,7 @@ export class ScooterController {
       mileage: number;
       batteryCycles: number;
       ownerId: string;
+      isImmobilized: boolean;
     },
   ) {
     return await this.createScooterUseCase.execute(body);
