@@ -9,6 +9,10 @@ export class InMemoryScooterRepository implements ScooterRepository {
     return this.scooters.find((scooter) => scooter.id === id) || null;
   }
 
+  async findAll(): Promise<Scooter[]> {
+    return this.scooters;
+  }
+
   async save(scooter: Scooter): Promise<void> {
     this.scooters.push(scooter);
   }

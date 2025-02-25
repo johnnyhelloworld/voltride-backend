@@ -6,5 +6,6 @@ export class Scooter {
     public batteryCycles: number,
     public lastMaintenanceDate: Date,
     public status: 'active' | 'maintenance' | 'out_of_service',
+    public ownerId: string,
   ) {}
 }

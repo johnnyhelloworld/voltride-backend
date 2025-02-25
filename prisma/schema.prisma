@@ -15,6 +15,8 @@ model Scooter {
   lastMaintenanceDate DateTime
   mileage             Int
   status              String
+  ownerId             String?       // ownerId est optionnel
+  user                User?         @relation("UserScooters", fields: [ownerId], references: [id])  // user est maintenant optionnel
   Maintenance         Maintenance[]
 }
 
@@ -34,4 +36,15 @@ model Maintenance {
   partsReplaced String[]
   type          String
   scooter       Scooter  @relation(fields: [scooterId], references: [id])
+}
+
+model User {
+  id              String   @id @default(uuid())
+  email           String   @unique
+  password        String
+  roles           String[] // Roles can be managed as an array of strings
+  name            String?
+  licenseNumber   String?
+  modelPreferences String[]
+  scooters        Scooter[] @relation("UserScooters") // Added relation to Scooter
 }

@@ -9,11 +9,36 @@ import { PrismaStockRepository } from './infrastructure/database/in-memory/stock
 import { PrismaService } from './infrastructure/database/prisma/prisma.service';
 import { PrismaScooterRepository } from './infrastructure/database/prisma/prisma-scooter.repository';
 import { PrismaMaintenanceRepository } from './infrastructure/database/prisma/prisma-maintenance.repository';
-import { MaintenanceScheduler } from './domain/services/maintenance-scheduler';
+import { MaintenanceScheduler } from './application/services/maintenance-scheduler';
+import { ScheduleModule } from '@nestjs/schedule';
+import { NotifyUpcomingMaintenanceUseCase } from './application/use-cases/maintenance/notify-upcoming-maintenance.use-case';
+import { NotificationService } from './application/services/notification.service';
+import { MaintenanceCronService } from './application/services/maintenance-cron.service';
+import { RolesGuard } from './application/guards/roles.guard';
+import { PassportModule } from '@nestjs/passport';
+import { JwtModule } from '@nestjs/jwt';
+import { AuthController } from './interface/controllers/auth.controller';
+import { AuthService } from './application/services/auth.service';
+import { JwtStrategy } from './application/strategies/jwt.strategy';
+import { PrismaUserRepository } from './infrastructure/database/prisma/prisma-user.repository';
+import { ConfigModule } from '@nestjs/config';
 
 @Module({
-  imports: [],
-  controllers: [ScooterController, MaintenanceController, StockController],
+  imports: [
+    ScheduleModule.forRoot(),
+    ConfigModule.forRoot(),
+    PassportModule,
+    JwtModule.register({
+      secret: process.env.JWT_SECRET || 'secretKey',
+      signOptions: { expiresIn: '1h' },
+    }),
+  ],
+  controllers: [
+    ScooterController,
+    MaintenanceController,
+    StockController,
+    AuthController,
+  ],
   providers: [
     PrismaService,
     CreateScooterUseCase,
@@ -32,6 +57,16 @@ import { MaintenanceScheduler } from './domain/services/maintenance-scheduler';
       useClass: PrismaStockRepository,
     },
     MaintenanceScheduler,
+    NotifyUpcomingMaintenanceUseCase,
+    NotificationService,
+    MaintenanceCronService,
+    RolesGuard,
+    AuthService,
+    JwtStrategy,
+    {
+      provide: 'UserRepository',
+      useClass: PrismaUserRepository,
+    },
   ],
   exports: [PrismaService],
 })

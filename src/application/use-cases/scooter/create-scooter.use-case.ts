@@ -11,6 +11,7 @@ export class CreateScooterUseCase {
     model: string;
     mileage: number;
     batteryCycles: number;
+    ownerId: string;
   }): Promise<void> {
     const scooter = new Scooter(
       crypto.randomUUID(),
@@ -19,6 +20,7 @@ export class CreateScooterUseCase {
       input.batteryCycles,
       new Date(),
       'active',
+      input.ownerId,
     );
     console.log('Scooter trouvé:', scooter);
     await this.scooterRepository.save(scooter);

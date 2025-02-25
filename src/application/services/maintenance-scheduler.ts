@@ -7,14 +7,14 @@ export class MaintenanceScheduler {
   static calculateNextMaintenance(
     scooterModel,
     lastMaintenanceDate: Date,
-    cyclesUsed: number,
-    distanceTraveled: number,
+    batteryCycles: number,
+    mileage: number,
   ): Date | null {
     let nextMaintenanceDate: Date | null = null;
 
     // Vérification de la batterie par cycles de charge
     if (scooterModel.batteryCheckInterval) {
-      const cyclesRemaining = scooterModel.batteryCheckInterval - cyclesUsed;
+      const cyclesRemaining = scooterModel.batteryCheckInterval - batteryCycles;
       if (cyclesRemaining <= 0) {
         nextMaintenanceDate = nextMaintenanceDate || new Date(); // Si la batterie nécessite une vérification, prendre la date actuelle.
       }
@@ -34,7 +34,7 @@ export class MaintenanceScheduler {
     // Révision complète basée sur la distance parcourue
     if (
       scooterModel.revisionInterval &&
-      distanceTraveled >= scooterModel.revisionInterval
+      mileage >= scooterModel.revisionInterval
     ) {
       const revisionDueDate = new Date(lastMaintenanceDate);
       nextMaintenanceDate = nextMaintenanceDate || revisionDueDate;

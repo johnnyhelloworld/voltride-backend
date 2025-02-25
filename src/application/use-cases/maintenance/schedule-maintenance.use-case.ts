@@ -1,7 +1,7 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { Maintenance } from '../../../domain/entities/maintenance.entity';
 import { MaintenanceRepository } from '../../repositories/maintenance.repository';
-import { MaintenanceScheduler } from '../../../domain/services/maintenance-scheduler';
+import { MaintenanceScheduler } from '../../services/maintenance-scheduler';
 import { ScooterRepository } from '../../repositories/scooter.repository';
 
 @Injectable()

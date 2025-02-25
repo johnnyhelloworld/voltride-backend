@@ -18,6 +18,23 @@ export class PrismaScooterRepository implements ScooterRepository {
       scooter.batteryCycles,
       scooter.lastMaintenanceDate,
       scooter.status as 'active' | 'maintenance' | 'out_of_service',
+      scooter.ownerId || '',
+    );
+  }
+
+  async findAll(): Promise<Scooter[]> {
+    const scooters = await this.prisma.scooter.findMany();
+    return scooters.map(
+      (scooter) =>
+        new Scooter(
+          scooter.id,
+          scooter.model,
+          scooter.mileage,
+          scooter.batteryCycles,
+          scooter.lastMaintenanceDate,
+          scooter.status as 'active' | 'maintenance' | 'out_of_service',
+          scooter.ownerId || '',
+        ),
     );
   }
 
