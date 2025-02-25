@@ -1,0 +1,37 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Scooter {
+  id                  String        @id @default(uuid())
+  model               String
+  createdAt           DateTime      @default(now())
+  batteryCycles       Int
+  lastMaintenanceDate DateTime
+  mileage             Int
+  status              String
+  Maintenance         Maintenance[]
+}
+
+model Stock {
+  id        String @id @default(uuid())
+  partName  String @unique
+  quantity  Int
+  threshold Int?
+}
+
+model Maintenance {
+  id            String   @id @default(uuid())
+  scooterId     String
+  date          DateTime
+  cost          Float
+  notes         String
+  partsReplaced String[]
+  type          String
+  scooter       Scooter  @relation(fields: [scooterId], references: [id])
+}
