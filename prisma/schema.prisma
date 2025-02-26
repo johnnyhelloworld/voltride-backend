@@ -8,17 +8,19 @@ datasource db {
 }
 
 model Scooter {
-  id                  String        @id @default(uuid())
+  id                  String           @id @default(uuid())
   model               String
-  createdAt           DateTime      @default(now())
+  createdAt           DateTime         @default(now())
   batteryCycles       Int
   lastMaintenanceDate DateTime
   mileage             Int
   status              String
   ownerId             String? // ownerId est optionnel
-  user                User?         @relation("UserScooters", fields: [ownerId], references: [id]) // user est maintenant optionnel
+  user                User?            @relation("UserScooters", fields: [ownerId], references: [id]) // user est maintenant optionnel
   Maintenance         Maintenance[]
-  isImmobilized       Boolean       @default(false)
+  isImmobilized       Boolean          @default(false)
+  Reservation         Reservation[]
+  IncidentReport      IncidentReport[]
 }
 
 model Stock {
@@ -40,14 +42,16 @@ model Maintenance {
 }
 
 model User {
-  id               String    @id @default(uuid())
-  email            String    @unique
+  id               String           @id @default(uuid())
+  email            String           @unique
   password         String
   roles            String[] // Roles can be managed as an array of strings
   name             String?
   licenseNumber    String?
   modelPreferences String[]
-  scooters         Scooter[] @relation("UserScooters") // Added relation to Scooter
+  scooters         Scooter[]        @relation("UserScooters") // Added relation to Scooter
+  Reservation      Reservation[]
+  IncidentReport   IncidentReport[]
 }
 
 model Incident {
@@ -87,4 +91,33 @@ model Order {
   status       String    @default("pending")
 
   part Part @relation(fields: [partId], references: [id])
+}
+
+model Reservation {
+  id        String   @id @default(uuid())
+  scooterId String
+  userId    String
+  startTime DateTime
+  endTime   DateTime
+  location  String
+  status    String   @default("pending")
+  createdAt DateTime @default(now())
+
+  scooter Scooter @relation(fields: [scooterId], references: [id])
+  user    User    @relation(fields: [userId], references: [id])
+}
+
+model IncidentReport {
+  id          String   @id @default(uuid())
+  scooterId   String
+  userId      String
+  description String
+  reportedAt  DateTime @default(now())
+  status      String   @default("pending")
+  severity    String
+  location    String
+  createdAt   DateTime @default(now())
+
+  scooter Scooter @relation(fields: [scooterId], references: [id])
+  user    User    @relation(fields: [userId], references: [id])
 }

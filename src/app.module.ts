@@ -31,6 +31,11 @@ import { PartController } from './interface/controllers/part.controller';
 import { PartService } from './application/services/part.service';
 import { OrderController } from './interface/controllers/order.controller';
 import { PrismaOrderRepository } from './infrastructure/database/prisma/prisma-order.repository';
+import { UserController } from './interface/controllers/user.controller';
+import { PrismaReservationRepository } from './infrastructure/database/prisma/prisma-reservation.repository';
+import { ReservationController } from './interface/controllers/reservation.controller';
+import { PrismaIncidentReportRepository } from './infrastructure/database/prisma/prisma-incident-report.repository';
+import { IncidentReportController } from './interface/controllers/incident-report.controller';
 
 @Module({
   imports: [
@@ -50,6 +55,9 @@ import { PrismaOrderRepository } from './infrastructure/database/prisma/prisma-o
     IncidentController,
     PartController,
     OrderController,
+    UserController,
+    ReservationController,
+    IncidentReportController,
   ],
   providers: [
     PrismaService,
@@ -93,6 +101,14 @@ import { PrismaOrderRepository } from './infrastructure/database/prisma/prisma-o
     {
       provide: 'OrderRepository',
       useClass: PrismaOrderRepository,
+    },
+    {
+      provide: 'ReservationRepository',
+      useClass: PrismaReservationRepository,
+    },
+    {
+      provide: 'IncidentReportRepository',
+      useClass: PrismaIncidentReportRepository,
     },
   ],
   exports: [PrismaService],
